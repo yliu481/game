@@ -2,9 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Snake</title>
 </head>
+<style type="text/css">
+    canvas{
+        border-style: solid;
+        border-width: 10px;
+        border-color: black;
+    }
+</style>
 <body>
+    <canvas id="myCanvas" width="400" height="400">
+        Cannot use canvas, please change your browser.
+    </canvas>
+    <script type="text/javascript">
+      let gameFrame = document.getElementById('myCanvas');
+      let speed = 160; //snake moving speed
+      let ctx = gameFrame.getContext("2d");
+      let x = 8; //initial coordinate
+      let y = 8;
+      let food = 0; //food position
+      let length = 4; // snake length
+      let path = []; //snake's path
+      let size = 8; // snake's width
+      let direction = "ArrowRight"; //moving direction
+      const move = () =>{
+        switch(direction){
+          case 'ArrowLeft':
+            x -= size;
+            break;
+          case 'ArrowUp':
+            y -= size;
+            break;
+          case "ArrowRight":
+            x += size;
+            break;
+          case "ArrowDown":
+            y += size;
+            break;
+          default: break;
+        }
+        if (x > 400){
+          x=0;
+        }
+        if (x < 0){
+          x=400;
+        }
+        if (y > 400){
+          y=0;
+        }
+        if (y < 0){
+          y = 400;
+        }
+        if (path.length > length) {
+          let temp = path.shift();
+          ctx.clearRect(temp['x'], temp['y'], size, size)
+        }
 
+        path.push({'x':x, 'y':y});
+        ctx.fillStyle = "#006699";
+        ctx.strokeStyle = "#006699";
+        ctx.fillRect(x, y, size, size);
+        if ( (food * 8)===x && (food * 8)===y) {
+          displayFood();
+          length++;
+        }
+      };
+      interval = window.setInterval(move, speed);
+      document.onkeydown = function (e) {
+        let key = e.key;
+        switch(key) {
+          case 'ArrowLeft':
+            if (direction !== 'ArrowRight') {
+              direction = 'ArrowLeft';
+            }
+            break;
+          case 'ArrowDown':
+            if (direction !== 'ArrowUp') {
+              direction = 'ArrowDown';
+            }
+            break;
+          case "ArrowRight":
+            if (direction !== 'ArrowLeft') {
+              direction = 'ArrowRight';
+            }
+            break;
+          case "ArrowUp":
+            if (direction !== 'ArrowDown') {
+              direction = 'ArrowUp';
+            }
+            break;
+          default: break;
+        }
+      };
+      const displayFood = () =>{
+        food = Math.ceil(Math.random()*50);
+        ctx.fillStyle = "#000000";
+        ctx.strokeStyle = "#000000";
+        ctx.fillRect(food * 8, food * 8, 8, 8);
+      };
+      displayFood();
+    </script>
 </body>
 </html>
