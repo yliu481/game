@@ -25,11 +25,15 @@
       let ctx = gameFrame.getContext("2d");
       let x = 8; //initial coordinate
       let y = 8;
-      let food = 0; //food position
-      let length = 4; // snake length
-      let path = []; //snake's path
+      let foodX = 0; //food position
+      let foodY = 0; //food position
+      let length = 340; // snake length
+      let pathX = []; //snake's path on X axis
+      let pathY = []; //snake's path on Y axis
       let size = 8; // snake's width
       let direction = "ArrowRight"; //moving direction
+
+      //moving function,
       const move = () =>{
         switch(direction){
           case 'ArrowLeft':
@@ -58,16 +62,18 @@
         if (y < 0){
           y = 400;
         }
-        if (path.length > length) {
-          let temp = path.shift();
-          ctx.clearRect(temp['x'], temp['y'], size, size)
+        if (pathX.length > length) {
+          let tempX = pathX.shift();
+          let tempY = pathY.shift();
+          ctx.clearRect(tempX, tempY, size, size)
         }
 
-        path.push({'x':x, 'y':y});
+        pathX.push(x);
+        pathY.push(y);
         ctx.fillStyle = "#006699";
         ctx.strokeStyle = "#006699";
         ctx.fillRect(x, y, size, size);
-        if ( (food * 8)===x && (food * 8)===y) {
+        if ( (foodX )===x && (foodY )===y) {
           displayFood();
           scoreDisplay.innerHTML=length-3;
           length++;
@@ -104,13 +110,23 @@
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
-      }
+      };
+        //new food will not be on the body of snake.
       const displayFood = () =>{
-        food = getRandomInt(1,50);
+        foodX = getRandomInt(1,50) * 8;
+        foodY = getRandomInt(1,50) * 8;
+        let xIndex = pathX.indexOf(foodX);
+        let yIndex = pathY.indexOf(foodY);
+        while( (xIndex === yIndex) && xIndex !==-1 && yIndex !== -1 ) {
+          foodX = getRandomInt(1,50) * 8;
+          foodY = getRandomInt(1,50) * 8;
+          console.log(foodX,foodY);
+        };
         ctx.fillStyle = "#000000";
         ctx.strokeStyle = "#000000";
-        ctx.fillRect(food * 8, food * 8, 8, 8);
+        ctx.fillRect(foodX, foodY, 8, 8);
       };
+
       displayFood();
     </script>
 </body>
