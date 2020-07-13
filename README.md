@@ -1,8 +1,8 @@
-##Games
+## Games
 Just some games
 
-##Run
+## Run
 go to each folder, and run the index.js
 
-##License
+## License
 [MIT](https://choosealicense.com/licenses/mit/)
